@@ -1,2 +1,2 @@
-# Interview_Prep-Coding-Java-
+# Interview_Prep-Coding-Java
 Competitive Programming
