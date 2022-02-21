@@ -30,32 +30,25 @@ class Solution {
     public int rob(int[] nums) {
         int n = nums.length;
         int dp [] = new int[n];
-        if(n==1){ 
-            return  nums[0];
+        if(n == 0 ||  nums == null){
+            return 0;
+        }
+        if(n==1){
+            return nums[0];
         }
         if(n==2){
-           return Math.max(nums[0],nums[1]); 
-        }
-        if(n==3){
-            return Math.max(nums[0]+nums[2],nums[1]);
+            return Math.max(nums[0],nums[1]);
         }
         dp[0] = nums[0];
-        dp[1] = nums[1];
-        dp[2] = nums[0]+nums[2];
-        for(int i=3;i<n;i++){
-            dp[i] = nums[i]+Math.max(dp[i-2],dp[i-3]);
+        dp[1] = Math.max(nums[0],nums[1]);
+        for(int i=2;i<n;i++){
+            dp[i] = Math.max(nums[i]+dp[i-2],dp[i-1]);
         }
-        int ans =0;
-        for(int i=0;i<n;i++){
-            if(dp[i]>ans){
-                ans = dp[i];
-            }
-        }
-        return ans;
+        return dp[n-1];
     }
 }
 
 /*************
 Runtime: 0 ms, faster than 100.00% of Java online submissions for House Robber.
-Memory Usage: 42.2 MB, less than 5.90% of Java online submissions for House Robber.
+Memory Usage: 41.5 MB, less than 21.42% of Java online submissions for House Robber.
 *************/
