@@ -53,7 +53,7 @@ class Solution {
     }
     //Time Complexity: O(n * (2^min(n,k))
     //Space Complexity: O(1) , If we ignore space taken by stack frame
-    // Result TLE------
+    // Result TLE------33/121 passes
     
     // Recursion+Memory ->Memoziation 
     public int solveM(int e, int f,int dp[][]){
@@ -75,12 +75,12 @@ class Solution {
     }
     //Time Complexity: O((n^2) * k)
     //Space Complexity: O(k * n)
-    //Result TLE
+    //Result TLE 69/121 Passed
     
     // Ierative+Memeory -> Tabulation
-    public int solveTab(int e, int f,int dp[][]){
-         for(int i=1;i<=f;i++){
-             for(int j=1;j<=e;j++){
+    public int solveTab(int k, int n,int dp[][]){
+         for(int i=1;i<=k;i++){
+             for(int j=1;j<=n;j++){
                  if(i==1){
                      dp[i][j] =j;
                  }else if(j==1){
@@ -90,28 +90,59 @@ class Solution {
                      for(int mj=j-1,pj=0;mj>=0;mj--,pj++){
                          int val1 =dp[i][mj];
                          int val2 =dp[i-1][pj];
-                         int max =Math.max(val1,val2);
-                         min =Math.min(max,min);
+                         int val =Math.max(val1,val2);
+                         min =Math.min(val,min);
                      }
                      dp[i][j]=min+1;
                  }
              }
          }
-        return dp[f][e];
+        return dp[k][n];
     }
-    //
+    //Result :TLE (94/121 Passed)
     
+    //Optimised Memoziation 
+    //Binary Search 
+    public int solveMO(int k, int n,int dp[][]){
+         if(n==0 || n==1){         //Base case  when floor is 0 or 1 
+             return n;
+         }
+        if(k==1){                  //Base case egg is 1;
+            return n;
+        }
+        if(dp[k][n] !=-1){         //Check wheather its value is available i.e it was previously recursively called on not?
+            return dp[k][n];
+        }
+        int min=Integer.MAX_VALUE; // to store min
+        int l=1,h=n,temp=0;
+        while(l<=h){
+            int mid =(h+l)/2;
+            int left=solveMO(k-1,mid-1,dp); //Break Condition
+            int right =solveMO(k,n-mid,dp); //Not Break Condition
+            temp=1+Math.max(left,right);    //Max of worst case
+            
+            if(left<right){
+                l=mid+1;
+            }else{
+                h=mid-1;
+            }
+            min = Math.min(temp,min);                // min of best cases 
+        }
+        return dp[k][n]=min;   // update the value in dp[][] and return it.
+    }
     
+    //Result :78 ms  121/121 All testcase passed...
     
     public int superEggDrop(int k, int n) {
         //return solveR(k,n);
-        int dp[][] = new int[n+1][k+1];
-        //for(int i=0;i<dp.length;i++){
-        //    for(int j=0;j<dp[0].length;j++){
-         //       dp[i][j] =-1;
-          //  }
-        //}
+        int dp[][] = new int[k+1][n+1];
+        for(int i=0;i<dp.length;i++){
+            for(int j=0;j<dp[0].length;j++){
+               dp[i][j] =-1;
+            }
+        }
        // return solveM(k,n,dp);
-        return solveTab(k,n,dp);
+        //return solveTab(k,n,dp);
+        return solveMO(k,n,dp);
     }
 }
