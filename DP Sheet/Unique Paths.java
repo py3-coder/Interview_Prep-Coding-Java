@@ -9,8 +9,6 @@ Given the two integers m and n, return the number of possible unique paths that 
 
 The test cases are generated so that the answer will be less than or equal to 2 * 109.
 
- 
-
 Example 1:
 Input: m = 3, n = 7
 Output: 28
@@ -87,3 +85,89 @@ class Solution {
         return solveSpaceOpt(m,n);
     }
 }
+```
+ Recursive :TLE  38/63 Passed
+ class Solution {
+    public int solveR(int m,int n){
+        if(m==0 && n==0) return 1;
+        if(m<0 || n<0) return 0;
+        int up = solveR(m-1,n);
+        int left  = solveR(m,n-1);
+        return up+left;
+    }
+    public int uniquePaths(int m, int n) {
+        return solveR(m-1,n-1);
+    }
+}
+Algorithms Analysis :
+Time  =O( 2^(m*n))
+Space  = O((n-1)+(m-1))
+
+```
+```
+Memoization : 63/63 Passed ---> 1ms
+class Solution {
+    public int solveR(int m,int n,int dp[][]){
+        if(m==0 && n==0) return 1;
+        if(m<0 || n<0) return 0;
+        if(dp[m][n] !=-1){
+            return dp[m][n];
+        }
+        int up   =solveR(m-1,n,dp);
+        int left =solveR(m,n-1,dp);
+        dp[m][n]=up+left;
+        return dp[m][n];
+    }
+    public int uniquePaths(int m, int n) {
+        int dp[][] =new int[m][n];
+        Arrays.stream(dp).forEach(a -> Arrays.fill(a, -1));
+        return solveR(m-1,n-1,dp);
+    }
+}
+Algorithms Analysis: 
+Time : O(n*m)
+Space : O((n-1)+(m-1))+O(n*m)
+```
+```
+Tabulation  All passesd
+public int solveTab(int m,int n, int dp[][]){
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0 && j==0 )  dp[i][j] =1;
+                else{
+                    int up=0,left=0;
+                    if(i>0) up = dp[i-1][j];
+                    if(j>0) left =dp[i][j-1];
+                    dp[i][j] = up+left;
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }
+Algorithm  Analysis:
+Time : O(n*m)
+Space :O(n*m)
+```
+```
+Optimization  0ms
+    int prev[] =new int[n];
+        for(int i=0;i<m;i++){
+            int curr[] =new int[n];
+            for(int j=0;j<n;j++){
+                if(i==0 && j==0) curr[i]=1;
+                else{
+                int up =0,left=0;
+                if(i>0) up = prev[j];
+                if(j>0) left =curr[j-1];
+                curr[j] = up+left;
+                }
+            }
+            prev = curr;
+        }
+        return prev[n-1];
+    }
+	
+	Algorithms Analysis :
+	Time : O(n*m);
+	Space :O(n);
+```
