@@ -1,3 +1,3 @@
 # Interview_Prep-Coding-Java
-## Competitive Programming 
+## DSA & Competitive Programming 
 ### Author : Saurabh 
